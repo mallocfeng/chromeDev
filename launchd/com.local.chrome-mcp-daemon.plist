@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.local.chrome-mcp-daemon</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/bin/env</string>
+      <string>npm</string>
+      <string>start</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Volumes/MacMiniDisk/project/chromeDev</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>CHROME_AUTO_CONNECT</key>
+      <string>1</string>
+      <key>CHROME_CHANNEL</key>
+      <string>stable</string>
+      <key>MCP_HOST</key>
+      <string>127.0.0.1</string>
+      <key>MCP_PORT</key>
+      <string>8787</string>
+      <key>MCP_CONNECTION_TIMEOUT</key>
+      <string>30000</string>
+      <key>MCP_REQUEST_TIMEOUT</key>
+      <string>30000</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/chrome-mcp-daemon.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/chrome-mcp-daemon.err.log</string>
+  </dict>
+</plist>

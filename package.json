@@ -1,0 +1,20 @@
+{
+  "name": "chrome-mcp-daemon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Persistent middleware for exposing chrome-devtools-mcp over HTTP without repeated Chrome authorization prompts.",
+  "bin": {
+    "chromedev": "./bin/chromedev.mjs"
+  },
+  "scripts": {
+    "start": "node ./server/chrome-mcp-daemon.mjs",
+    "start:headless": "CHROME_HEADLESS=1 node ./server/chrome-mcp-daemon.mjs",
+    "cli": "node ./bin/chromedev.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "chrome-devtools-mcp": "^0.20.1",
+    "mcp-proxy": "^6.4.4"
+  }
+}

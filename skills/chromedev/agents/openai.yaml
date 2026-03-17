@@ -1,0 +1,15 @@
+interface:
+  display_name: "ChromeDev"
+  short_description: "Use local Chrome MCP for live browsing"
+  default_prompt: "Use $chromedev to access the user's live Chrome through the local MCP middleware and extract data from webpages."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "chromedev-local"
+      description: "Local chrome-devtools-mcp middleware for browser access"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:8787/mcp"
+
+policy:
+  allow_implicit_invocation: true
