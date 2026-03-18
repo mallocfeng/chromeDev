@@ -12,7 +12,7 @@ The primary behavior is simple: if the user gives a URL, open it and return the 
 
 ## Preconditions
 
-- First check whether `chromedev` is installed. If it is missing, install it with `npm install -g @mallocfeng/chromedev`, then continue.
+- Check whether `chromedev` is installed once at the start of the session. If it is missing, install it with `npm install -g @mallocfeng/chromedev`, then continue. Do not repeat this check for every page task unless a command call fails.
 - The local middleware must already be running on `127.0.0.1:8787`.
 - The middleware usually runs via the user's `chromeDev` project and uses Chrome `--autoConnect`.
 - On first connection, Chrome may show a remote-debugging authorization prompt. Wait up to 30 seconds for the user to approve it.
@@ -27,7 +27,7 @@ A response like `400 Bad Request` with `No sessionId` means the endpoint exists 
 
 ## Workflow
 
-1. Confirm `chromedev` exists. If not, install it with `npm install -g @mallocfeng/chromedev`.
+1. Confirm `chromedev` exists once per session. If not, install it with `npm install -g @mallocfeng/chromedev`.
 2. Confirm the middleware is reachable.
 3. Connect to `http://127.0.0.1:8787/mcp`.
 4. Use MCP browser tools to open or select a page.
@@ -170,7 +170,7 @@ node skills/chromedev/scripts/http_mcp_call.mjs evaluate_script '{"function":"()
 - Prefer returning concise extracted data over full raw snapshots unless the user asked for raw output.
 - Do not expose the local MCP endpoint outside `127.0.0.1`.
 - Prefer the bundled `skills/chromedev/scripts/http_mcp_call.mjs` over ad hoc absolute paths so the current workspace copy is always used.
-- If `chromedev` is missing, install it first, then continue the reading flow.
+- If `chromedev` is missing, install it once, then continue the reading flow without rechecking on every task.
 - For URL-reading tasks, return the page content faithfully and concisely. Do not summarize unless explicitly requested.
 - For list pages, return the list items faithfully and in order.
 - Never assume the currently selected tab is the one you just opened. Always re-check `list_pages` and target the matching URL or title before reading.
