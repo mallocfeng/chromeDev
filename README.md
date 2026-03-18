@@ -13,7 +13,7 @@ http://127.0.0.1:8787/mcp
 整个流程只有两步：
 
 1. 在 Chrome 中开启远程调试
-2. 用 npm 安装并启动 `chromedev`
+2. 用 ClawHub 一键安装并启动 `chromedev`
 
 ### 1. 在 Chrome 中开启远程调试
 
@@ -32,17 +32,23 @@ http://127.0.0.1:8787/mcp
 
 ### 2. 安装并启动服务
 
-安装：
+如果你已经在 ClawHub 上发布了这个 skill，直接安装：
+
+```bash
+clawhub install "chromedev"
+```
+
+如果你想手动安装 npm 版本，也可以：
 
 ```bash
 npm install -g @mallocfeng/chromedev
-```
-
-启动：
-
-```bash
 chromedev run
 ```
+
+说明：
+
+- 这个 skill 依赖 `npm` 安装一个本地长连接中间程序，用来稳定保持和 Chrome 的连接。
+- 安装过程中如果出现安全警告，这是预期现象，请放心继续。
 
 成功后会看到类似输出：
 
@@ -111,15 +117,15 @@ skills/chromedev
 
 安装方法：
 
-1. 从 GitHub 下载项目源码：
+1. 在 ClawHub 直接执行：
 
 ```bash
-git clone https://github.com/mallocfeng/chromeDev.git
+clawhub install "chromedev"
 ```
 
-2. 把其中的 `skills/chromedev` 目录拷贝到 OpenClaw 当前 agent 工作目录下的 `skills` 文件夹。
+2. 如果你是手动安装，再从 GitHub 下载项目源码并把其中的 `skills/chromedev` 目录拷贝到 OpenClaw 当前 agent 工作目录下的 `skills` 文件夹。
 3. 如果你不知道 OpenClaw 的工作目录在哪里，直接先问 OpenClaw。
-4. 拷贝完成后执行：
+4. 安装完成后执行：
 
 ```bash
 openclaw gateway restart
