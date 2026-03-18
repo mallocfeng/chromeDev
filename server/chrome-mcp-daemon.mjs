@@ -1,16 +1,18 @@
 import { spawn } from 'node:child_process'
 import { existsSync, mkdirSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import process from 'node:process'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const projectRoot = dirname(__dirname)
+const appHome = process.env.CHROMEDEV_HOME || join(homedir(), '.chromedev')
 
 const HOST = process.env.MCP_HOST || '127.0.0.1'
 const MCP_PORT = Number(process.env.MCP_PORT || '8787')
 const DEBUG_PORT = Number(process.env.CHROME_DEBUG_PORT || '9222')
-const PROFILE_DIR = process.env.CHROME_USER_DATA_DIR || join(projectRoot, '.chrome-profile')
+const PROFILE_DIR = process.env.CHROME_USER_DATA_DIR || join(appHome, 'chrome-profile')
 const HEADLESS = ['1', 'true', 'yes'].includes(String(process.env.CHROME_HEADLESS || '').toLowerCase())
 const AUTO_CONNECT = !['0', 'false', 'no'].includes(String(process.env.CHROME_AUTO_CONNECT || '1').toLowerCase())
 const MCP_CONNECTION_TIMEOUT = Number(process.env.MCP_CONNECTION_TIMEOUT || '30000')

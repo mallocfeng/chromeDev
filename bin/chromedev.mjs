@@ -2,6 +2,7 @@
 
 import { spawn } from 'node:child_process'
 import { mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import process from 'node:process'
@@ -9,7 +10,8 @@ import net from 'node:net'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const projectRoot = dirname(__dirname)
-const runDir = join(projectRoot, '.run')
+const appHome = process.env.CHROMEDEV_HOME || join(homedir(), '.chromedev')
+const runDir = join(appHome, 'run')
 const pidFile = join(runDir, 'chromedev.pid')
 const metaFile = join(runDir, 'chromedev.json')
 const outLog = join(runDir, 'chromedev.out.log')
@@ -74,7 +76,10 @@ async function runCommand(args) {
     const child = spawn(process.execPath, [daemonScript], {
       cwd: projectRoot,
       stdio: 'inherit',
-      env: process.env,
+      env: {
+        ...process.env,
+        CHROMEDEV_HOME: appHome,
+      },
     })
     child.on('exit', (code) => {
       process.exit(code ?? 0)
@@ -88,7 +93,10 @@ async function runCommand(args) {
     cwd: projectRoot,
     detached: true,
     stdio: ['ignore', stdoutFd, stderrFd],
-    env: process.env,
+    env: {
+      ...process.env,
+      CHROMEDEV_HOME: appHome,
+    },
   })
 
   child.unref()

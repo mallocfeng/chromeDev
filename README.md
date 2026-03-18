@@ -13,7 +13,7 @@ http://127.0.0.1:8787/mcp
 整个流程只有两步：
 
 1. 在 Chrome 中开启远程调试
-2. 启动 `chromedev` 服务
+2. 安装并启动 `chromedev` 服务
 
 ### 1. 在 Chrome 中开启远程调试
 
@@ -32,31 +32,19 @@ http://127.0.0.1:8787/mcp
 
 ### 2. 安装并启动服务
 
-进入项目目录：
+推荐直接用 npm 全局安装：
 
 ```bash
-cd /Volumes/MacMiniDisk/project/chromeDev
+npm install -g @mallocfeng/chromedev
 ```
 
-安装依赖：
-
-```bash
-npm install
-```
-
-如果你想把 `chromedev` 作为全局命令使用：
-
-```bash
-npm link
-```
-
-后台启动：
+安装完成后，后台启动：
 
 ```bash
 chromedev run
 ```
 
-如果你还没有执行 `npm link`，也可以直接：
+如果你是在项目源码目录里本地运行，也可以用：
 
 ```bash
 node ./bin/chromedev.mjs run
@@ -70,6 +58,44 @@ endpoint: http://127.0.0.1:8787/mcp
 ```
 
 这表示服务已经在后台运行，其他 AI 或程序现在可以访问 `http://127.0.0.1:8787/mcp`。
+
+## npm 安装
+
+推荐安装方式：
+
+```bash
+npm install -g @mallocfeng/chromedev
+```
+
+安装完成后可直接使用：
+
+```bash
+chromedev run
+chromedev status
+chromedev stop
+```
+
+如果你不想全局安装，也可以临时执行：
+
+```bash
+npx @mallocfeng/chromedev run
+```
+
+如果用户把这个 GitHub 仓库地址直接发给 AI，AI 应该按下面的步骤理解和执行：
+
+1. 先安装命令行工具：
+
+```bash
+npm install -g @mallocfeng/chromedev
+```
+
+2. 然后启动服务：
+
+```bash
+chromedev run
+```
+
+3. 如果还需要安装 OpenClaw skill，再从 GitHub 下载项目源码，并把 `skills/chromedev` 拷贝到 OpenClaw 的 `skills` 目录。
 
 ## 常用命令
 
@@ -103,7 +129,7 @@ chromedev stop
 chromedev logs
 ```
 
-如果没有 `npm link`，把 `chromedev` 换成：
+如果你是在源码目录里本地运行，把 `chromedev` 换成：
 
 ```bash
 node ./bin/chromedev.mjs
@@ -147,13 +173,42 @@ node /Volumes/MacMiniDisk/project/chromeDev/skills/chromedev/scripts/http_mcp_ca
 
 ## 在 OpenClaw 中安装 skill
 
-项目里已经包含了一份 skill：
+这个项目里已经包含了一份 skill：
 
 ```text
 skills/chromedev
 ```
 
-安装方法很简单：
+如果你是通过 GitHub 下载项目源码：
+
+1. 打开仓库：`https://github.com/mallocfeng/chromeDev`
+2. 下载项目源码，或者直接 clone：
+
+```bash
+git clone https://github.com/mallocfeng/chromeDev.git
+```
+
+3. 你需要用到的 skill 目录就是：
+
+```text
+chromeDev/skills/chromedev
+```
+
+如果用户把 GitHub 地址直接发给 AI，AI 可以按这套指令执行：
+
+```bash
+git clone https://github.com/mallocfeng/chromeDev.git
+```
+
+然后取出：
+
+```text
+chromeDev/skills/chromedev
+```
+
+再把它复制到 OpenClaw 的 `skills` 目录下。
+
+安装到 OpenClaw 的方法很简单：
 
 1. 把项目目录中的 `skills/chromedev` 目录拷贝到你 OpenClaw 工作目录的 `skills` 文件夹下。
 2. 如果你不清楚这个文件夹在哪里，可以先直接问 OpenClaw，它会告诉你当前 agent 工作目录在哪里。
@@ -164,6 +219,23 @@ openclaw gateway restart
 ```
 
 完成后就可以在 OpenClaw 里调用这个 skill。
+
+给 AI 的可执行描述可以直接写成这样：
+
+```text
+从 https://github.com/mallocfeng/chromeDev 下载项目，把其中的 skills/chromedev 目录拷贝到当前 OpenClaw agent 工作目录下的 skills 文件夹，然后执行 openclaw gateway restart。
+```
+
+目录结构应该像这样：
+
+```text
+<openclaw-agent-workdir>/
+  skills/
+    chromedev/
+      SKILL.md
+      agents/openai.yaml
+      scripts/http_mcp_call.mjs
+```
 
 ## 在 OpenClaw 中使用
 
@@ -181,19 +253,25 @@ openclaw gateway restart
 
 这个 skill 会通过本地 `ChromeDev` MCP 服务访问你当前打开的 Chrome，并读取网页内容。
 
+注意：
+
+- OpenClaw 里的 skill 只负责“告诉 AI 怎么调用本地 ChromeDev 服务”
+- 真正提供浏览器访问能力的，还是你本机运行中的 `chromedev run`
+- 所以使用 skill 前，先确认本地 `chromedev` 服务已经启动
+
 ## 日志与运行文件
 
 默认文件位置：
 
-- `./.run/chromedev.pid`
-- `./.run/chromedev.out.log`
-- `./.run/chromedev.err.log`
+- `~/.chromedev/run/chromedev.pid`
+- `~/.chromedev/run/chromedev.out.log`
+- `~/.chromedev/run/chromedev.err.log`
 
 直接查看日志：
 
 ```bash
-tail -f /Volumes/MacMiniDisk/project/chromeDev/.run/chromedev.out.log
-tail -f /Volumes/MacMiniDisk/project/chromeDev/.run/chromedev.err.log
+tail -f ~/.chromedev/run/chromedev.out.log
+tail -f ~/.chromedev/run/chromedev.err.log
 ```
 
 ## 默认配置

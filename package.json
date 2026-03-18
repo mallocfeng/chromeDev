@@ -1,11 +1,39 @@
 {
-  "name": "chrome-mcp-daemon",
+  "name": "@mallocfeng/chromedev",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "Persistent middleware for exposing chrome-devtools-mcp over HTTP without repeated Chrome authorization prompts.",
+  "description": "CLI that exposes chrome-devtools-mcp as a local background service connected to your live Chrome browser.",
+  "license": "MIT",
+  "author": "mallocfeng",
+  "homepage": "https://github.com/mallocfeng/chromeDev#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mallocfeng/chromeDev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mallocfeng/chromeDev/issues"
+  },
+  "keywords": [
+    "chrome",
+    "mcp",
+    "devtools",
+    "cli",
+    "browser",
+    "automation"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "server",
+    "skills",
+    "launchd",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
-    "chromedev": "./bin/chromedev.mjs"
+    "chromedev": "bin/chromedev.mjs"
   },
   "scripts": {
     "start": "node ./server/chrome-mcp-daemon.mjs",
