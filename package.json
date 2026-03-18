@@ -1,6 +1,6 @@
 {
   "name": "@mallocfeng/chromedev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "CLI that exposes chrome-devtools-mcp as a local background service connected to your live Chrome browser.",
   "license": "MIT",

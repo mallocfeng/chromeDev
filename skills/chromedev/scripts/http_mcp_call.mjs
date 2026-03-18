@@ -47,11 +47,30 @@ async function main() {
 
   try {
     await client.connect(transport)
-    const result = await client.callTool({ name: toolName, arguments: args })
+    const result = await callWithRecovery(client, toolName, args)
     console.log(JSON.stringify(result, null, 2))
   } finally {
     await transport.close().catch(() => {})
   }
+}
+
+async function callWithRecovery(client, toolName, args) {
+  const result = await client.callTool({ name: toolName, arguments: args })
+
+  if (toolName === 'list_pages' && isClosedPageError(result)) {
+    await client.callTool({
+      name: 'new_page',
+      arguments: { url: 'about:blank', timeout: 30000 },
+    })
+    return client.callTool({ name: toolName, arguments: args })
+  }
+
+  return result
+}
+
+function isClosedPageError(result) {
+  const text = result?.content?.find?.((item) => item?.type === 'text')?.text || ''
+  return Boolean(result?.isError && text.includes('selected page has been closed'))
 }
 
 function printUsage() {
