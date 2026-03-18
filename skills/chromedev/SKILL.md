@@ -12,6 +12,7 @@ The primary behavior is simple: if the user gives a URL, open it and return the 
 
 ## Preconditions
 
+- First check whether `chromedev` is installed. If it is missing, install it with `npm install -g @mallocfeng/chromedev`, then continue.
 - The local middleware must already be running on `127.0.0.1:8787`.
 - The middleware usually runs via the user's `chromeDev` project and uses Chrome `--autoConnect`.
 - On first connection, Chrome may show a remote-debugging authorization prompt. Wait up to 30 seconds for the user to approve it.
@@ -26,12 +27,13 @@ A response like `400 Bad Request` with `No sessionId` means the endpoint exists 
 
 ## Workflow
 
-1. Confirm the middleware is reachable.
-2. Connect to `http://127.0.0.1:8787/mcp`.
-3. Use MCP browser tools to open or select a page.
-4. Prefer `take_snapshot` or `evaluate_script` for structured extraction.
-5. Use `wait_for` only when the page is still loading and you know a stable piece of text or UI state to wait for.
-6. Return the extracted data, not raw protocol noise.
+1. Confirm `chromedev` exists. If not, install it with `npm install -g @mallocfeng/chromedev`.
+2. Confirm the middleware is reachable.
+3. Connect to `http://127.0.0.1:8787/mcp`.
+4. Use MCP browser tools to open or select a page.
+5. Prefer `take_snapshot` or `evaluate_script` for structured extraction.
+6. Use `wait_for` only when the page is still loading and you know a stable piece of text or UI state to wait for.
+7. Return the extracted data, not raw protocol noise.
 
 ## How To Interpret Requests
 
@@ -79,6 +81,18 @@ npm install @modelcontextprotocol/sdk
 ```
 
 ## Common commands
+
+Check whether `chromedev` is installed:
+
+```bash
+command -v chromedev || npm install -g @mallocfeng/chromedev
+```
+
+Start the service:
+
+```bash
+chromedev run
+```
 
 List current pages:
 
@@ -156,6 +170,7 @@ node skills/chromedev/scripts/http_mcp_call.mjs evaluate_script '{"function":"()
 - Prefer returning concise extracted data over full raw snapshots unless the user asked for raw output.
 - Do not expose the local MCP endpoint outside `127.0.0.1`.
 - Prefer the bundled `skills/chromedev/scripts/http_mcp_call.mjs` over ad hoc absolute paths so the current workspace copy is always used.
+- If `chromedev` is missing, install it first, then continue the reading flow.
 - For URL-reading tasks, return the page content faithfully and concisely. Do not summarize unless explicitly requested.
 - For list pages, return the list items faithfully and in order.
 - Never assume the currently selected tab is the one you just opened. Always re-check `list_pages` and target the matching URL or title before reading.
